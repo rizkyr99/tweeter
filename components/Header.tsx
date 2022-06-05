@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 function Header() {
   return (
-    <div className='h-16 px-4 flex items-center justify-between shadow-sm'>
+    <div className='sticky top-0 z-50 h-16 px-4 flex items-center justify-between shadow-sm bg-white'>
       <div className='flex items-center gap-x-2'>
         <img className='h-10' src='/logo.png' alt='' />
         <span className='hidden md:inline font-bold'>Tweeter</span>
@@ -13,7 +13,7 @@ function Header() {
         <Link href='/'>Bookmarks</Link>
       </div>
       <button className='flex items-center gap-x-2'>
-        <img className='h-6 rounded-md' src='/rizky.jpg' alt='' />
+        <img className='h-8 rounded-md' src='/rizky.jpg' alt='' />
         <span className='hidden md:inline font-semibold'>Rizky Ramadhan</span>
       </button>
     </div>
