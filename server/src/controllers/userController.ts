@@ -20,6 +20,22 @@ const registerUser = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
+const loginUser = asyncHandler(async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+
+  if (user && (await user.matchPassword(password))) {
+    res.status(200).json({
+      _id: user._id,
+      email: user.email,
+      firstName: user.firstName,
+      token: generateToken(user._id),
+    });
+  } else {
+    throw new Error('Wrong username or password');
+  }
+});
+
 const getUserById = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   const user = await User.findById(id);
@@ -113,4 +129,4 @@ const unfollowUser = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
-export { registerUser, getUserById, followUser, unfollowUser };
+export { registerUser, loginUser, getUserById, followUser, unfollowUser };
