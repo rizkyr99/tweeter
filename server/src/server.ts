@@ -18,6 +18,7 @@ connectDB();
 
 app.use('/api/users', userRoutes);
 
+app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(colors.yellow(`Server running on port ${PORT}`));
 });
