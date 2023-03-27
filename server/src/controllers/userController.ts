@@ -8,6 +8,10 @@ interface JwtPayload {
   id: String;
 }
 
+interface IUserRequest extends Request {
+  user: any;
+}
+
 const registerUser = asyncHandler(async (req: Request, res: Response) => {
   const user = new User(req.body);
 
@@ -59,74 +63,30 @@ const getUserById = asyncHandler(async (req: Request, res: Response) => {
   });
 });
 
-const followUser = asyncHandler(async (req: Request, res: Response) => {
-  let token: string;
+const followUser = asyncHandler(async (req: IUserRequest, res: Response) => {
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    { $push: { followings: req.params.id } },
+    { new: true }
+  );
+  await User.findByIdAndUpdate(req.params.id, {
+    $push: { followers: req.user._id },
+  });
 
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
-  ) {
-    try {
-      token = req.headers.authorization.split(' ')[1];
-
-      const decoded = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
-
-      const user = await User.findByIdAndUpdate(
-        decoded.id,
-        { $push: { followings: req.params.id } },
-        { new: true }
-      );
-      await User.findByIdAndUpdate(req.params.id, {
-        $push: { followers: decoded.id },
-      });
-
-      res.json(user);
-    } catch (error) {
-      console.log(error);
-      throw new Error('Token failed');
-    }
-  }
-
-  if (!token) {
-    throw new Error('No token');
-  }
+  res.json(user);
 });
 
-const unfollowUser = asyncHandler(async (req: Request, res: Response) => {
-  try {
-    let token: string;
+const unfollowUser = asyncHandler(async (req: IUserRequest, res: Response) => {
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    { $pull: { followings: req.params.id } },
+    { new: true }
+  );
+  await User.findByIdAndUpdate(req.params.id, {
+    $pull: { followers: req.user._id },
+  });
 
-    if (
-      req.headers.authorization &&
-      req.headers.authorization.startsWith('Bearer')
-    ) {
-      try {
-        token = req.headers.authorization.split(' ')[1];
-
-        const decoded = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
-
-        const user = await User.findByIdAndUpdate(
-          decoded.id,
-          { $pull: { followings: req.params.id } },
-          { new: true }
-        );
-        await User.findByIdAndUpdate(req.params.id, {
-          $pull: { followers: decoded.id },
-        });
-
-        res.json(user);
-      } catch (error) {
-        console.log(error);
-        throw new Error('Token failed');
-      }
-    }
-
-    if (!token) {
-      throw new Error('No token');
-    }
-  } catch (error) {
-    res.json({ error: error.message });
-  }
+  res.json(user);
 });
 
 export { registerUser, loginUser, getUserById, followUser, unfollowUser };

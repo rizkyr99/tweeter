@@ -6,6 +6,7 @@ import {
   registerUser,
   unfollowUser,
 } from '../controllers/userController';
+import { protect } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
@@ -13,8 +14,8 @@ const router = express.Router();
 // POST / (private)
 router.post('/', registerUser);
 router.post('/login', loginUser);
-router.put('/:id/follow', followUser);
-router.put('/:id/unfollow', unfollowUser);
+router.put('/:id/follow', protect, followUser);
+router.put('/:id/unfollow', protect, unfollowUser);
 
 // GET /me (private)
 // GET /:id (public)

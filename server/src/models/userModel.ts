@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>(
     },
     description: {
       type: String,
-      required: true,
+      default: '',
     },
     picturePath: {
       type: String,
