@@ -1,5 +1,6 @@
 import express, { Application } from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import colors from '@colors/colors';
 import { v2 as cloudinary } from 'cloudinary';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
@@ -20,17 +21,7 @@ cloudinary.config({
   api_secret: process.env.API_SECRET,
 });
 
-const storageUsers = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: async (req, file) => {
-    return {
-      folder: 'tweeter/users',
-    };
-  },
-});
-
-const uploadUser = multer({ storage: storageUsers });
-
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 

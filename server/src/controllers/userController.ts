@@ -15,6 +15,12 @@ interface IUserRequest extends Request {
 const registerUser = asyncHandler(async (req: Request, res: Response) => {
   const user = new User(req.body);
 
+  const userExists = await User.findOne({ email: req.body.email });
+  if (userExists) {
+    res.status(400);
+    throw new Error('Email has already registered');
+  }
+
   await user.save();
   res.status(200).json({
     _id: user._id,
