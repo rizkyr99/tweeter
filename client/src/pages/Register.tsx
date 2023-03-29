@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { HiEnvelope, HiLockClosed, HiUser } from 'react-icons/hi2';
 import { FaFacebookF, FaGithub, FaGoogle, FaTwitter } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { registerUser } from '../features/auth/authActions';
@@ -66,7 +66,11 @@ const Register = () => {
               placeholder='Email'
               {...register('email')}
             />
-            <p className='text-red-500 text-xs p-2'>{errors.email?.message}</p>
+            {errors.email?.message && (
+              <p className='text-red-500 text-xs p-2'>
+                {errors.email?.message}
+              </p>
+            )}
           </div>
           <div className='relative mb-3'>
             <HiUser className='h-5 w-5 absolute top-2 left-2 text-gray-400' />
@@ -76,9 +80,11 @@ const Register = () => {
               placeholder='First Name'
               {...register('firstName')}
             />
-            <p className='text-red-500 text-xs p-2'>
-              {errors.firstName?.message}
-            </p>
+            {errors.firstName?.message && (
+              <p className='text-red-500 text-xs p-2'>
+                {errors.firstName?.message}
+              </p>
+            )}
           </div>
           <div className='relative mb-3'>
             <HiUser className='h-5 w-5 absolute top-2 left-2 text-gray-400' />
@@ -88,9 +94,11 @@ const Register = () => {
               placeholder='First Name'
               {...register('lastName')}
             />
-            <p className='text-red-500 text-xs p-2'>
-              {errors.lastName?.message}
-            </p>
+            {errors.lastName?.message && (
+              <p className='text-red-500 text-xs p-2'>
+                {errors.lastName?.message}
+              </p>
+            )}
           </div>
           <div className='relative mb-3'>
             <HiLockClosed className='h-5 w-5 absolute top-2 left-2 text-gray-400' />
@@ -100,9 +108,11 @@ const Register = () => {
               placeholder='Password'
               {...register('password')}
             />
-            <p className='text-red-500 text-xs p-2'>
-              {errors.password?.message}
-            </p>
+            {errors.password?.message && (
+              <p className='text-red-500 text-xs p-2'>
+                {errors.password?.message}
+              </p>
+            )}
           </div>
           <div className='relative mb-3'>
             <HiLockClosed className='h-5 w-5 absolute top-2 left-2 text-gray-400' />
@@ -112,9 +122,11 @@ const Register = () => {
               placeholder='Confirm Password'
               {...register('confirmPassword')}
             />
-            <p className='text-red-500 text-xs p-2'>
-              {errors.confirmPassword?.message}
-            </p>
+            {errors.confirmPassword?.message && (
+              <p className='text-red-500 text-xs p-2'>
+                {errors.confirmPassword?.message}
+              </p>
+            )}
           </div>
           <button
             type='submit'

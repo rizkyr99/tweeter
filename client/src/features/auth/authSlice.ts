@@ -10,7 +10,7 @@ export interface AuthState {
 }
 
 const userInfo = localStorage.getItem('userInfo')
-  ? localStorage.getItem('userInfo')
+  ? JSON.parse(localStorage.getItem('userInfo') as string)
   : null;
 
 const initialState: AuthState = {
@@ -23,7 +23,12 @@ const initialState: AuthState = {
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    logout: (state) => {
+      localStorage.removeItem('userInfo');
+      state.userInfo = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state, action) => {
@@ -41,5 +46,7 @@ const authSlice = createSlice({
       });
   },
 });
+
+export const { logout } = authSlice.actions;
 
 export default authSlice.reducer;
