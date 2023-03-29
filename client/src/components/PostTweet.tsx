@@ -5,6 +5,7 @@ import {
   HiPhoto,
   HiUser,
   HiUsers,
+  HiXMark,
 } from 'react-icons/hi2';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { createPost } from '../features/post/postActions';
@@ -27,7 +28,7 @@ const PostTweet = () => {
 
   const dispatch = useAppDispatch();
 
-  const [imagePreview, setImagePreview] = useState('');
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const {
     register,
@@ -47,6 +48,11 @@ const PostTweet = () => {
       setValue('image', e.target.files[0]);
       console.log(newUrl);
     }
+  };
+
+  const removeImage = () => {
+    setValue('image', null);
+    setImagePreview(null);
   };
 
   const onSubmit = (data: FormData) => {
@@ -88,20 +94,20 @@ const PostTweet = () => {
                   placeholder="What's happening?"
                   {...register('content')}
                 />
-                {/* {selectedFile && (
-                <div className='relative'>
-                  <div
-                    className='absolute top-2 left-2 bg-black/50 p-1 rounded-full hover:bg-black/60 cursor-pointer shadow'
-                    onClick={() => setSelectedFile(null)}>
-                    <XIcon className=' h-4 w-4 text-white' />
+                {imagePreview && (
+                  <div className='relative'>
+                    <div
+                      className='absolute top-2 left-2 bg-black/50 p-1 rounded-full hover:bg-black/60 cursor-pointer shadow'
+                      onClick={removeImage}>
+                      <HiXMark className=' h-4 w-4 text-white' />
+                    </div>
+                    <img
+                      src={imagePreview}
+                      alt=''
+                      className='max-h-96 object-contain my-2 rounded-xl'
+                    />
                   </div>
-                  <img
-                    src={selectedFile}
-                    alt=''
-                    className='max-h-96 object-contain my-2 rounded-xl'
-                  />
-                </div>
-              )} */}
+                )}
               </div>
             </div>
           )}
