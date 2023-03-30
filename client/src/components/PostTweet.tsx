@@ -12,6 +12,8 @@ import { createPost } from '../features/post/postActions';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import toast from 'react-hot-toast';
+import { resetPost } from '../features/post/postSlice';
 
 const formSchema = yup
   .object({
@@ -24,7 +26,7 @@ type FormData = yup.InferType<typeof formSchema>;
 
 const PostTweet = () => {
   const { userInfo } = useAppSelector((state) => state.auth);
-  const { loading } = useAppSelector((state) => state.post);
+  const { loading, success } = useAppSelector((state) => state.post);
 
   const dispatch = useAppDispatch();
 
@@ -34,8 +36,10 @@ const PostTweet = () => {
     register,
     watch,
     setValue,
+    reset,
     handleSubmit,
-    formState: { errors },
+    formState,
+    formState: { errors, isSubmitSuccessful },
   } = useForm<FormData>({ resolver: yupResolver(formSchema) });
 
   const handleImageChange = (e: any) => {
@@ -51,15 +55,24 @@ const PostTweet = () => {
   };
 
   const removeImage = () => {
-    setValue('image', null);
+    reset({ image: undefined });
     setImagePreview(null);
   };
 
   const onSubmit = (data: FormData) => {
+    console.log(data);
     dispatch(createPost(data));
+    reset({ content: '' });
+    removeImage();
   };
 
-  useEffect(() => {}, [watch]);
+  useEffect(() => {
+    if (success) {
+      toast.success('Post uploaded');
+      dispatch(resetPost());
+    }
+    console.log;
+  }, [success, reset, dispatch]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
